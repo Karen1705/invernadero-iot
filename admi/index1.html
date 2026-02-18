@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Invernadero Dashboard</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f2f2f2;
+    text-align:center;
+}
+
+.menu button{
+    background:#4CAF50;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    margin:10px;
+    cursor:pointer;
+    border-radius:5px;
+}
+
+iframe{
+    width:95%;
+    height:750px;
+    border:none;
+    margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Invernadero Dashboard</h1>
+
+<div class="menu">
+    <button onclick="cargar('admi/index.html')">Admin</button>
+    <button onclick="cargar('control/index.html')">Control</button>
+    <button onclick="cargar('monitor/index.html')">Monitor</button>
+</div>
+
+<iframe id="frame"></iframe>
+
+<script>
+function cargar(pagina){
+    document.getElementById("frame").src = "../" + pagina;
+}
+
+/* cargar admin al iniciar */
+cargar('admi/index.html');
+</script>
+
+</body>
+</html>

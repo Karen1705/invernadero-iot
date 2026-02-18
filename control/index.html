@@ -1,4 +1,85 @@
-<h2>Control de Dispositivos</h2>
-<div id="lista"></div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Control IoT</title>
 
-<script src="app.js"></script>
+<style>
+body{
+    font-family: Arial;
+    text-align:center;
+    background:#111;
+    color:white;
+}
+
+button{
+    padding:15px 30px;
+    font-size:18px;
+    margin:20px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.on{
+    background:green;
+    color:white;
+}
+
+.off{
+    background:red;
+    color:white;
+}
+</style>
+
+</head>
+<body>
+
+<h1>CONTROL INVERNADERO</h1>
+
+<button class="on" onclick="enviarComando('on')">
+ENCENDER
+</button>
+
+<button class="off" onclick="enviarComando('off')">
+APAGAR
+</button>
+
+<p id="estado"></p>
+
+<script>
+
+async function enviarComando(estado){
+
+    console.log("Enviando:", estado);
+
+    try{
+
+        const respuesta = await fetch("http://localhost:3000/control",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body: JSON.stringify({
+                estado: estado
+            })
+        });
+
+        const data = await respuesta.json();
+
+        document.getElementById("estado").innerText =
+            "✅ " + data.mensaje;
+
+    }catch(error){
+
+        console.log(error);
+
+        document.getElementById("estado").innerText =
+            "❌ Error al enviar comando";
+    }
+}
+
+</script>
+
+</body>
+</html>

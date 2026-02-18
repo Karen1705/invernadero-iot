@@ -1,68 +1,23 @@
-const API="https://698a177cc04d974bc6a15394.mockapi.io/api/v1/invernadero-iot"
+const express = require("express");
+const cors = require("cors");
 
-async function cargar(){
- const res=await fetch(API)
- const data=await res.json()
+const app = express();
 
- lista.innerHTML=""
+app.use(cors());
+app.use(express.json());
 
- data.forEach(d=>{
+// ====== RUTA CONTROL ======
+app.post("/control", (req, res) => {
 
-  // SIMULACIÓN SENSOR HUMEDAD
-  if(d.Tipo==="Sensor"){
-     let humedadRandom=Math.floor(Math.random()*100)
+    console.log("COMANDO RECIBIDO:");
+    console.log(req.body);
 
-     fetch(API+"/"+d.id,{
-       method:"PUT",
-       headers:{'Content-Type':'application/json'},
-       body:JSON.stringify({Humedad:humedadRandom})
-     })
+    res.json({
+        status: "ok",
+        mensaje: "Comando recibido correctamente"
+    });
+});
 
-     d.Humedad=humedadRandom
-  }
-
-  // REGLAS AUTOMÁTICAS
-  if(d.Nombre==="Valvula Agua"){
-     if(d.Humedad<40){
-        actualizarEstado(d.id,true)
-        d.Estado=true
-     }
-     if(d.Humedad>80){
-        actualizarEstado(d.id,false)
-        d.Estado=false
-     }
-  }
-
-  lista.innerHTML+=`
-  <div>
-   <b>${d.Nombre}</b>
-   <input type="checkbox"
-    ${d.Estado?"checked":""}
-    ${d.Tipo==="Sensor"?"disabled":""}
-    onchange="toggle(${d.id},this.checked)">
-   <span> Humedad: ${d.Humedad}%</span>
-  </div>`
- })
-}
-
-async function toggle(id,estado){
- await fetch(API+"/"+id,{
-  method:"PUT",
-  headers:{'Content-Type':'application/json'},
-  body:JSON.stringify({
-   Estado:estado,
-   Fecha:new Date()
-  })
- })
-}
-
-async function actualizarEstado(id,estado){
- await fetch(API+"/"+id,{
-  method:"PUT",
-  headers:{'Content-Type':'application/json'},
-  body:JSON.stringify({Estado:estado})
- })
-}
-
-cargar()
-setInterval(cargar,2000)
+app.listen(3000, () => {
+    console.log("Servidor corriendo en http://localhost:3000");
+});

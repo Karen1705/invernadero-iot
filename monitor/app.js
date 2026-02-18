@@ -1,27 +1,25 @@
-const API="TU_LINK_MOCKAPI/dispositivos"
+const tabla = document.getElementById("tabla");
 
-async function cargar(){
- const res=await fetch(API)
- const data=await res.json()
+/* DATOS DE PRUEBA */
+const datos = [
+    { device:"sensor humedad", value:"45%", event:"OK", hora:"01:20" },
+    { device:"sensor temperatura", value:"28°C", event:"OK", hora:"01:21" },
+    { device:"riego", value:"ON", event:"Activo", hora:"01:22" }
+];
 
- graficas.innerHTML=""
- tabla.innerHTML=""
+function cargarDatos(){
+    tabla.innerHTML = "";
 
- data.slice(-10).forEach(d=>{
-  graficas.innerHTML+=`
-  <div>
-   ${d.nombre} :
-   <progress value="${d.estado?100:0}" max="100"></progress>
-  </div>`
-
-  tabla.innerHTML+=`
-  <tr>
-   <td>${d.nombre}</td>
-   <td>${d.estado?"Encendido":"Apagado"}</td>
-   <td>${new Date(d.fecha).toLocaleString()}</td>
-  </tr>`
- })
+    datos.forEach(d => {
+        tabla.innerHTML += `
+            <tr>
+                <td>${d.device}</td>
+                <td>${d.value}</td>
+                <td>${d.event}</td>
+                <td>${d.hora}</td>
+            </tr>
+        `;
+    });
 }
 
-cargar()
-setInterval(cargar,2000)
+cargarDatos();
